@@ -1,10 +1,14 @@
 import type { SummarizerOptions, SummaryResult } from './types.js';
 import { SummarizationError } from './errors.js';
 
-const DEFAULT_MODEL = 'google/gemini-2.0-flash-001';
+const DEFAULT_MODEL = 'openrouter/free';
 const DEFAULT_MAX_LENGTH = 8000;
 const MAX_RETRIES = 3;
 const RETRY_DELAYS = [1000, 2000, 4000]; // Exponential backoff: 1s, 2s, 4s
+
+// Prompts - extracted for maintainability
+const SYSTEM_PROMPT = 'You are a helpful assistant that summarizes web page content. Provide a concise summary of the following text.';
+const USER_PROMPT_PREFIX = 'Please summarize this web page content:\n\n';
 
 const OPENROUTER_API_BASE = 'https://openrouter.ai/api/v1';
 
@@ -49,11 +53,11 @@ export async function summarize(text: string, options?: SummarizerOptions): Prom
           messages: [
             {
               role: 'system',
-              content: 'You are a helpful assistant that summarizes web page content. Provide a concise summary of the following text.',
+              content: SYSTEM_PROMPT,
             },
             {
               role: 'user',
-              content: `Please summarize this web page content:\n\n${truncatedText}`,
+              content: USER_PROMPT_PREFIX + truncatedText,
             },
           ],
         }),
