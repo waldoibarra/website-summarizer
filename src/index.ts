@@ -13,10 +13,15 @@ program
   .name('website-summarizer')
   .description('CLI tool to summarize websites using AI via OpenRouter')
   .version('1.0.0')
-  .argument('<url>', 'The website URL to summarize')
+  .argument('[url]', 'The website URL to summarize')
   .option('-m, --model <model>', 'AI model to use', 'google/gemini-2.0-flash-001')
   .option('-l, --max-length <n>', 'Maximum characters to send to AI', '8000')
-  .action(async (url: string, options: { model?: string; maxLength?: string }) => {
+  .action(async (url: string | undefined, options: { model?: string; maxLength?: string }) => {
+    // If no URL provided, show help and exit with code 0
+    if (!url) {
+      program.help();
+      process.exit(0);
+    }
     try {
       // Validate URL
       const validatedUrl = validateUrl(url);
