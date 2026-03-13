@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import 'dotenv/config';
 import { Command } from 'commander';
 import { fetchPage } from './browser.js';
 import { extractContent } from './extractor.js';
@@ -14,7 +15,7 @@ program
   .description('CLI tool to summarize websites using AI via OpenRouter')
   .version('1.0.0')
   .argument('[url]', 'The website URL to summarize')
-  .option('-m, --model <model>', 'AI model to use', 'google/gemini-2.0-flash-001')
+  .option('-m, --model <model>', 'AI model to use', 'openrouter/free')
   .option('-l, --max-length <n>', 'Maximum characters to send to AI', '8000')
   .action(async (url: string | undefined, options: { model?: string; maxLength?: string }) => {
     // If no URL provided, show help and exit with code 0
