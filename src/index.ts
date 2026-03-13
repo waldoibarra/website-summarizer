@@ -94,8 +94,5 @@ program
     }
   );
 
-// Execute the program only when run directly
-// Check if this is being run as a CLI (not imported as a module)
-if (import.meta.url === `file://${process.argv[1]}`) {
-  program.parse();
-}
+// Execute the program when run directly
+program.parse(process.argv);
