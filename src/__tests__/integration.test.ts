@@ -26,9 +26,9 @@ describe('Integration: Full CLI Flow', () => {
       // Test the validation + extraction flow
       const url = 'https://example.com';
       const validatedUrl = validateUrl(url);
-      
+
       expect(validatedUrl).toBe('https://example.com');
-      
+
       const html = `
         <!DOCTYPE html>
         <html>
@@ -39,9 +39,9 @@ describe('Integration: Full CLI Flow', () => {
           </body>
         </html>
       `;
-      
+
       const extracted = extractContent(html, validatedUrl);
-      
+
       expect(extracted.title).toBe('Test Page');
       expect(extracted.text).toContain('Welcome');
       expect(extracted.text).toContain('test content');
@@ -68,9 +68,9 @@ describe('Integration: Full CLI Flow', () => {
           </body>
         </html>
       `;
-      
+
       const extracted = extractContent(html, url);
-      
+
       expect(extracted.title).toBe('Complex Page');
       // The extractor prioritizes article content
       expect(extracted.text).toContain('Article Title');
@@ -80,9 +80,9 @@ describe('Integration: Full CLI Flow', () => {
     it('should extract content from pages with minimal content', () => {
       const url = 'https://example.com';
       const html = '<html><body><p>Short</p></body></html>';
-      
+
       const extracted = extractContent(html, url);
-      
+
       expect(extracted.text).toBeDefined();
       expect(extracted.text.length).toBeGreaterThan(0);
     });
@@ -92,7 +92,7 @@ describe('Integration: Full CLI Flow', () => {
     it('should complete full flow when API is mocked', async () => {
       const mockFetchPage = vi.mocked(fetchPage);
       const mockSummarize = vi.mocked(summarize);
-      
+
       // Setup mocks
       mockFetchPage.mockResolvedValue(`
         <!DOCTYPE html>
@@ -104,20 +104,20 @@ describe('Integration: Full CLI Flow', () => {
           </body>
         </html>
       `);
-      
+
       mockSummarize.mockResolvedValue({
         summary: 'This is a mock summary of the page.',
         model: 'google/gemini-2.0-flash-001',
         tokensUsed: 100,
       });
-      
+
       // Execute the flow
       const url = 'https://example.com';
       const validatedUrl = validateUrl(url);
       const html = await fetchPage(validatedUrl);
       const extracted = extractContent(html, validatedUrl);
       const result = await summarize(extracted.text, { url: validatedUrl });
-      
+
       // Verify
       expect(validatedUrl).toBe('https://example.com');
       expect(html).toContain('Mock Content');
@@ -129,19 +129,19 @@ describe('Integration: Full CLI Flow', () => {
     it('should handle API errors gracefully in the flow', async () => {
       const mockFetchPage = vi.mocked(fetchPage);
       const mockSummarize = vi.mocked(summarize);
-      
+
       mockFetchPage.mockResolvedValue(`
         <!DOCTYPE html>
         <html><body><p>Content</p></body></html>
       `);
-      
+
       mockSummarize.mockRejectedValue(new Error('API rate limited'));
-      
+
       const url = 'https://example.com';
       const validatedUrl = validateUrl(url);
       const html = await fetchPage(validatedUrl);
       const extracted = extractContent(html, validatedUrl);
-      
+
       await expect(summarize(extracted.text, { url: validatedUrl }))
         .rejects.toThrow('API rate limited');
     });
@@ -155,7 +155,7 @@ describe('Integration: Full CLI Flow', () => {
     it('should handle empty HTML gracefully', () => {
       const url = 'https://example.com';
       const extracted = extractContent('', url);
-      
+
       expect(extracted.text).toBe('');
       expect(extracted.title).toBe('');
     });
@@ -163,7 +163,7 @@ describe('Integration: Full CLI Flow', () => {
     it('should handle malformed HTML gracefully', () => {
       const url = 'https://example.com';
       const extracted = extractContent('<div>Unclosed tags', url);
-      
+
       expect(extracted.text).toBeDefined();
     });
   });
@@ -182,9 +182,9 @@ describe('Integration: Full CLI Flow', () => {
           </body>
         </html>
       `;
-      
+
       const extracted = extractContent(html, url);
-      
+
       // Verify content is extracted and usable
       expect(extracted.text.length).toBeGreaterThan(10);
       expect(extracted.text).toMatch(/Title|First|Second/);
@@ -208,12 +208,13 @@ describe('Integration: Full CLI Flow', () => {
           </body>
         </html>
       `;
-      
+
       const extracted = extractContent(html, url);
-      
+
       // The extractor may prioritize first article
       expect(extracted.text).toContain('Section 1');
       expect(extracted.text).toContain('Content for section 1');
     });
   });
 });
+

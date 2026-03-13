@@ -21,7 +21,7 @@ const OPENROUTER_API_BASE = 'https://openrouter.ai/api/v1';
  */
 export async function summarize(text: string, options?: SummarizerOptions): Promise<SummaryResult> {
   const apiKey = process.env.OPENROUTER_API_KEY;
-  
+
   if (!apiKey) {
     throw new SummarizationError('Error: OPENROUTER_API_KEY environment variable is required');
   }
@@ -37,7 +37,7 @@ export async function summarize(text: string, options?: SummarizerOptions): Prom
 
   // Retry logic with exponential backoff
   let lastError: Error | undefined;
-  
+
   for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
     try {
       const response = await fetch(`${OPENROUTER_API_BASE}/chat/completions`, {
@@ -65,7 +65,7 @@ export async function summarize(text: string, options?: SummarizerOptions): Prom
 
       if (!response.ok) {
         const errorText = await response.text();
-        
+
         // Handle rate limiting
         if (response.status === 429) {
           if (attempt < MAX_RETRIES - 1) {
@@ -75,7 +75,7 @@ export async function summarize(text: string, options?: SummarizerOptions): Prom
           }
           throw new SummarizationError(`Rate limited. Please try again later.`);
         }
-        
+
         throw new SummarizationError(`API error: ${response.status} - ${errorText}`);
       }
 
@@ -101,9 +101,9 @@ export async function summarize(text: string, options?: SummarizerOptions): Prom
       if (error instanceof SummarizationError) {
         throw error;
       }
-      
+
       lastError = error instanceof Error ? error : new Error(String(error));
-      
+
       // Check if it's a rate limit
       if (lastError.message.includes('429') || lastError.message.includes('rate limit')) {
         if (attempt < MAX_RETRIES - 1) {
@@ -112,7 +112,7 @@ export async function summarize(text: string, options?: SummarizerOptions): Prom
           continue;
         }
       }
-      
+
       // For other errors, don't retry
       break;
     }
@@ -123,3 +123,4 @@ export async function summarize(text: string, options?: SummarizerOptions): Prom
     lastError
   );
 }
+

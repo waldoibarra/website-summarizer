@@ -117,3 +117,4 @@ Custom error types provide specific error messages:
 ## License
 
 ISC
+

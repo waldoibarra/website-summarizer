@@ -41,7 +41,7 @@ describe('Real API Integration Tests', () => {
       expect(result.summary).toBe('This is a test summary of the page content.');
       expect(result.model).toBe('openrouter/free');
       expect(result.tokensUsed).toBe(150);
-      
+
       scope.done();
     });
 
@@ -66,7 +66,7 @@ describe('Real API Integration Tests', () => {
 
       // Verify the model used was the default
       expect(result.model).toBe('openrouter/free');
-      
+
       scope.done();
     });
   });
@@ -82,9 +82,9 @@ describe('Real API Integration Tests', () => {
         });
 
       const { summarize } = await import('../summarizer.js');
-      
+
       await expect(summarize('Test content')).rejects.toThrow('API error');
-      
+
       scope.done();
     });
 
@@ -100,9 +100,9 @@ describe('Real API Integration Tests', () => {
         });
 
       const { summarize } = await import('../summarizer.js');
-      
+
       await expect(summarize('Test content')).rejects.toThrow('Rate limited');
-      
+
       scope.done();
     });
 
@@ -116,9 +116,9 @@ describe('Real API Integration Tests', () => {
         });
 
       const { summarize } = await import('../summarizer.js');
-      
+
       await expect(summarize('Test content')).rejects.toThrow('API error: 500');
-      
+
       scope.done();
     });
   });
@@ -146,7 +146,7 @@ describe('Real API Integration Tests', () => {
       expect(result.summary).toBe('Parsed summary content');
       expect(typeof result.summary).toBe('string');
       expect(result.summary.length).toBeGreaterThan(0);
-      
+
       scope.done();
     });
 
@@ -170,7 +170,7 @@ describe('Real API Integration Tests', () => {
       const result = await summarize('Content');
 
       expect(result.tokensUsed).toBe(500);
-      
+
       scope.done();
     });
 
@@ -194,8 +194,9 @@ describe('Real API Integration Tests', () => {
       const result = await summarize('Content', { url: 'https://example.com', model: 'custom/model' });
 
       expect(result.model).toBe('custom/model');
-      
+
       scope.done();
     });
   });
 });
+

@@ -25,8 +25,9 @@ describe('Dotenv Configuration', () => {
     // Read index.ts to verify dotenv is imported
     const indexPath = path.join(process.cwd(), 'src/index.ts');
     const indexContent = fs.readFileSync(indexPath, 'utf-8');
-    
+
     // Check that dotenv/config is imported at the top of the file
     expect(indexContent).toMatch(/import\s+['"]dotenv\/config['"]/);
   });
 });
+

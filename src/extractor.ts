@@ -87,3 +87,4 @@ export function extractContent(html: string, url: string): ExtractedContent {
     throw new ExtractionError(`Failed to extract content: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 }
+

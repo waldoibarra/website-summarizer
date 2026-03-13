@@ -28,7 +28,7 @@ export async function fetchPage(url: string): Promise<string> {
     });
 
     const page: Page = await browser.newPage();
-    
+
     // Set a realistic user agent
     await page.setExtraHTTPHeaders({
       'Accept-Language': 'en-US,en;q=0.9',
@@ -61,11 +61,11 @@ export async function fetchPage(url: string): Promise<string> {
     }
 
     const message = error instanceof Error ? error.message : 'Unknown error';
-    
+
     if (message.includes('net::ERR')) {
       throw new BrowserError('Failed to load page. The site may be unreachable or blocking requests.');
     }
-    
+
     if (message.includes('timeout')) {
       throw new BrowserError('Failed to fetch page: Request timed out.');
     }
@@ -83,3 +83,4 @@ export async function closeBrowser(): Promise<void> {
     browser = null;
   }
 }
+

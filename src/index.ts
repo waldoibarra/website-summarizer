@@ -26,37 +26,37 @@ program
     try {
       // Validate URL
       const validatedUrl = validateUrl(url);
-      
+
       console.log(`Fetching ${validatedUrl}...`);
-      
+
       // Fetch page with headless browser
       const html = await fetchPage(validatedUrl);
-      
+
       console.log('Extracting content...');
-      
+
       // Extract content
       const extracted = extractContent(html, validatedUrl);
-      
+
       if (!extracted.text || extracted.text.length < 100) {
         console.warn('Warning: The page has minimal content. The summary may not be accurate.');
       }
-      
+
       console.log('Generating summary...');
-      
+
       // Generate summary
       const result = await summarize(extracted.text, {
         url: validatedUrl,
         model: options.model,
         maxLength: parseInt(options.maxLength || '8000', 10),
       });
-      
+
       // Output summary
       console.log('\n--- Summary ---\n');
       console.log(result.summary);
       console.log('\n---');
       console.log(`Model: ${result.model}`);
       console.log(`Tokens used: ${result.tokensUsed}`);
-      
+
       process.exit(0);
     } catch (error) {
       // Handle errors with user-friendly messages
@@ -87,3 +87,4 @@ program
 if (import.meta.url === `file://${process.argv[1]}`) {
   program.parse();
 }
+

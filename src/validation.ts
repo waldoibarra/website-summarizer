@@ -26,3 +26,4 @@ export function validateUrl(urlString: string): string {
   }
   return urlString;
 }
+

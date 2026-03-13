@@ -47,3 +47,4 @@ export class SummarizationError extends Error {
     Error.captureStackTrace(this, SummarizationError);
   }
 }
+
