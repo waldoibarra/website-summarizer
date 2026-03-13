@@ -88,3 +88,39 @@ export function extractContent(html: string, url: string): ExtractedContent {
   }
 }
 
+/**
+ * Process pre-extracted content from browser (with Shadow DOM support)
+ * Applies cleaning, formatting, and truncation
+ * @param content - Content already extracted via page.evaluate()
+ * @param url - The original URL
+ * @returns Processed ExtractedContent
+ */
+export function processExtractedContent(content: { title: string; text: string }, url: string): ExtractedContent {
+  let { title, text } = content;
+
+  // Title fallback logic
+  if (!title || !title.trim()) {
+    // Title extraction will be handled by extractContent fallback if needed
+    // For now, leave empty string
+    title = '';
+  }
+
+  // Clean up extra whitespace while preserving paragraph structure
+  text = text
+    .split('\n\n')
+    .map(block => block.replace(/\s+/g, ' ').trim())
+    .filter(block => block.length > 0)
+    .join('\n\n');
+
+  // Truncate if too long
+  if (text.length > MAX_CONTENT_LENGTH) {
+    text = text.substring(0, MAX_CONTENT_LENGTH);
+  }
+
+  return {
+    title: title.trim(),
+    text,
+    url,
+  };
+}
+

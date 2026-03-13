@@ -2,8 +2,8 @@
 
 import 'dotenv/config';
 import { Command } from 'commander';
-import { fetchPage } from './browser.js';
-import { extractContent } from './extractor.js';
+import { extractPageContent } from './browser.js';
+import { processExtractedContent } from './extractor.js';
 import { summarize } from './summarizer.js';
 import { validateUrl } from './validation.js';
 import { ValidationError, BrowserError, ExtractionError, SummarizationError } from './errors.js';
@@ -29,13 +29,13 @@ program
 
       console.log(`Fetching ${validatedUrl}...`);
 
-      // Fetch page with headless browser
-      const html = await fetchPage(validatedUrl);
+      // Extract page content directly in browser (handles Shadow DOM)
+      const rawContent = await extractPageContent(validatedUrl);
 
-      console.log('Extracting content...');
+      console.log('Processing content...');
 
-      // Extract content
-      const extracted = extractContent(html, validatedUrl);
+      // Process and clean the extracted content
+      const extracted = processExtractedContent(rawContent, validatedUrl);
 
       if (!extracted.text || extracted.text.length < 100) {
         console.warn('Warning: The page has minimal content. The summary may not be accurate.');
