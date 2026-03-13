@@ -36,7 +36,8 @@ describe('Summarizer Module', () => {
   describe('summarize', () => {
     it('should return a summary for valid content', async () => {
       const { summarize } = await import('../summarizer.js');
-      const content = 'This is the content to summarize. It has multiple sentences that need to be condensed into a brief summary.';
+      const content =
+        'This is the content to summarize. It has multiple sentences that need to be condensed into a brief summary.';
 
       const result = await summarize(content);
 
@@ -73,7 +74,9 @@ describe('Summarizer Module', () => {
       const { summarize } = await import('../summarizer.js');
       delete process.env.OPENROUTER_API_KEY;
 
-      await expect(summarize('Test content')).rejects.toThrow('OPENROUTER_API_KEY');
+      await expect(summarize('Test content')).rejects.toThrow(
+        'OPENROUTER_API_KEY'
+      );
     });
 
     it('should handle API errors', async () => {
@@ -115,4 +118,3 @@ describe('Summarizer Module', () => {
     });
   });
 });
-

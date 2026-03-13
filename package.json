@@ -29,6 +29,7 @@
     "@stryker-mutator/core": "^9.6.0",
     "@stryker-mutator/vitest-runner": "^9.6.0",
     "nock": "^14.0.11",
+    "prettier": "^3.8.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3",
     "vitest": "^4.1.0"
@@ -41,4 +42,3 @@
     "playwright": "^1.58.2"
   }
 }
-

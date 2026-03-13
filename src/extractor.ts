@@ -25,7 +25,9 @@ export function extractContent(html: string, url: string): ExtractedContent {
     }
 
     // Remove unwanted elements
-    $('script, style, nav, header, footer, aside, .sidebar, .advertisement, .ad, .comments, .social-share, .related-articles').remove();
+    $(
+      'script, style, nav, header, footer, aside, .sidebar, .advertisement, .ad, .comments, .social-share, .related-articles'
+    ).remove();
 
     // Extract main content - iterate through child elements to preserve structure
     let text = '';
@@ -53,12 +55,14 @@ export function extractContent(html: string, url: string): ExtractedContent {
     if ($content && $content.length) {
       const paragraphs: string[] = [];
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      $content.find('p, h1, h2, h3, h4, h5, h6, li, blockquote, pre').each((_i: number, el: any) => {
-        const elText = $(el).text().trim();
-        if (elText) {
-          paragraphs.push(elText);
-        }
-      });
+      $content
+        .find('p, h1, h2, h3, h4, h5, h6, li, blockquote, pre')
+        .each((_i: number, el: any) => {
+          const elText = $(el).text().trim();
+          if (elText) {
+            paragraphs.push(elText);
+          }
+        });
 
       // If no specific elements found, get all text
       if (paragraphs.length === 0) {
@@ -84,7 +88,9 @@ export function extractContent(html: string, url: string): ExtractedContent {
       url,
     };
   } catch (error) {
-    throw new ExtractionError(`Failed to extract content: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    throw new ExtractionError(
+      `Failed to extract content: ${error instanceof Error ? error.message : 'Unknown error'}`
+    );
   }
 }
 
@@ -95,7 +101,10 @@ export function extractContent(html: string, url: string): ExtractedContent {
  * @param url - The original URL
  * @returns Processed ExtractedContent
  */
-export function processExtractedContent(content: { title: string; text: string }, url: string): ExtractedContent {
+export function processExtractedContent(
+  content: { title: string; text: string },
+  url: string
+): ExtractedContent {
   let { title, text } = content;
 
   // Title fallback logic
@@ -108,8 +117,8 @@ export function processExtractedContent(content: { title: string; text: string }
   // Clean up extra whitespace while preserving paragraph structure
   text = text
     .split('\n\n')
-    .map(block => block.replace(/\s+/g, ' ').trim())
-    .filter(block => block.length > 0)
+    .map((block) => block.replace(/\s+/g, ' ').trim())
+    .filter((block) => block.length > 0)
     .join('\n\n');
 
   // Truncate if too long
@@ -123,4 +132,3 @@ export function processExtractedContent(content: { title: string; text: string }
     url,
   };
 }
-

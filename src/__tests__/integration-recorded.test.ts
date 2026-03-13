@@ -38,7 +38,9 @@ describe('Real API Integration Tests', () => {
       const { summarize } = await import('../summarizer.js');
       const result = await summarize('Test content to summarize');
 
-      expect(result.summary).toBe('This is a test summary of the page content.');
+      expect(result.summary).toBe(
+        'This is a test summary of the page content.'
+      );
       expect(result.model).toBe('openrouter/free');
       expect(result.tokensUsed).toBe(150);
 
@@ -191,7 +193,10 @@ describe('Real API Integration Tests', () => {
         });
 
       const { summarize } = await import('../summarizer.js');
-      const result = await summarize('Content', { url: 'https://example.com', model: 'custom/model' });
+      const result = await summarize('Content', {
+        url: 'https://example.com',
+        model: 'custom/model',
+      });
 
       expect(result.model).toBe('custom/model');
 
@@ -199,4 +204,3 @@ describe('Real API Integration Tests', () => {
     });
   });
 });
-

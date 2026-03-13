@@ -30,4 +30,3 @@ describe('Dotenv Configuration', () => {
     expect(indexContent).toMatch(/import\s+['"]dotenv\/config['"]/);
   });
 });
-

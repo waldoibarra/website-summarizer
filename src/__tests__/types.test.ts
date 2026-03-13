@@ -1,5 +1,9 @@
 import { describe, it, expect } from 'vitest';
-import type { SummarizerOptions, ExtractedContent, SummaryResult } from '../types.js';
+import type {
+  SummarizerOptions,
+  ExtractedContent,
+  SummaryResult,
+} from '../types.js';
 
 describe('TypeScript Types', () => {
   describe('SummarizerOptions', () => {
@@ -53,4 +57,3 @@ describe('TypeScript Types', () => {
     });
   });
 });
-

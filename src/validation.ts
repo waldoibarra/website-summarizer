@@ -22,8 +22,9 @@ export function isValidUrl(urlString: string): boolean {
  */
 export function validateUrl(urlString: string): string {
   if (!isValidUrl(urlString)) {
-    throw new ValidationError('Invalid URL. Please provide a valid website address (e.g., https://example.com).');
+    throw new ValidationError(
+      'Invalid URL. Please provide a valid website address (e.g., https://example.com).'
+    );
   }
   return urlString;
 }
-

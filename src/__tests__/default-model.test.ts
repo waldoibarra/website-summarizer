@@ -9,7 +9,7 @@ describe('Default Model Configuration', () => {
 
     // Check that CLI defaults to 'openrouter/free'
     expect(content).toContain("'openrouter/free'");
-    expect(content).toContain("model <model>");
+    expect(content).toContain('model <model>');
   });
 
   it('should default to openrouter/free in summarizer (summarizer.ts)', async () => {
@@ -20,4 +20,3 @@ describe('Default Model Configuration', () => {
     expect(content).toContain("DEFAULT_MODEL = 'openrouter/free'");
   });
 });
-

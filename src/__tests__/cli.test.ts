@@ -25,15 +25,18 @@ describe('CLI Entry Point', () => {
 
     it('should have model option', async () => {
       const { program } = await import('../index.js');
-      const modelOption = program.options.find((opt: any) => opt.long === '--model');
+      const modelOption = program.options.find(
+        (opt: any) => opt.long === '--model'
+      );
       expect(modelOption).toBeDefined();
     });
 
     it('should have max-length option', async () => {
       const { program } = await import('../index.js');
-      const maxLengthOption = program.options.find((opt: any) => opt.long === '--max-length');
+      const maxLengthOption = program.options.find(
+        (opt: any) => opt.long === '--max-length'
+      );
       expect(maxLengthOption).toBeDefined();
     });
   });
 });
-

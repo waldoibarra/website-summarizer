@@ -142,8 +142,9 @@ describe('Integration: Full CLI Flow', () => {
       const html = await fetchPage(validatedUrl);
       const extracted = extractContent(html, validatedUrl);
 
-      await expect(summarize(extracted.text, { url: validatedUrl }))
-        .rejects.toThrow('API rate limited');
+      await expect(
+        summarize(extracted.text, { url: validatedUrl })
+      ).rejects.toThrow('API rate limited');
     });
   });
 
@@ -217,4 +218,3 @@ describe('Integration: Full CLI Flow', () => {
     });
   });
 });
-

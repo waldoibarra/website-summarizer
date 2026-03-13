@@ -5,7 +5,11 @@ vi.mock('playwright', async () => {
   const mockPage = {
     goto: vi.fn().mockResolvedValue(undefined),
     waitForLoadState: vi.fn().mockResolvedValue(undefined),
-    content: vi.fn().mockResolvedValue('<html><body><h1>Test Page</h1><p>Content here</p></body></html>'),
+    content: vi
+      .fn()
+      .mockResolvedValue(
+        '<html><body><h1>Test Page</h1><p>Content here</p></body></html>'
+      ),
     close: vi.fn().mockResolvedValue(undefined),
     setExtraHTTPHeaders: vi.fn().mockResolvedValue(undefined),
   };
@@ -40,7 +44,9 @@ describe('Browser Module', () => {
       const { chromium } = await import('playwright');
 
       // Make the mock reject
-      vi.mocked(chromium.launch).mockRejectedValueOnce(new Error('Navigation failed'));
+      vi.mocked(chromium.launch).mockRejectedValueOnce(
+        new Error('Navigation failed')
+      );
 
       await expect(fetchPage('https://example.com')).rejects.toThrow();
 
@@ -61,9 +67,13 @@ describe('Browser Module', () => {
       const { chromium } = await import('playwright');
 
       // Make launch reject with timeout error
-      vi.mocked(chromium.launch).mockRejectedValueOnce(new Error('Request timed out after 30000ms'));
+      vi.mocked(chromium.launch).mockRejectedValueOnce(
+        new Error('Request timed out after 30000ms')
+      );
 
-      await expect(fetchPage('https://example.com')).rejects.toThrow('timed out');
+      await expect(fetchPage('https://example.com')).rejects.toThrow(
+        'timed out'
+      );
 
       // Reset mock
       vi.mocked(chromium.launch).mockResolvedValue({
@@ -79,4 +89,3 @@ describe('Browser Module', () => {
     });
   });
 });
-

@@ -14,7 +14,9 @@ let browser: Browser | null = null;
 export async function fetchPage(url: string): Promise<string> {
   // Validate URL first
   if (!isValidUrl(url)) {
-    throw new BrowserError('Invalid URL provided. Please provide a valid HTTP or HTTPS URL.');
+    throw new BrowserError(
+      'Invalid URL provided. Please provide a valid HTTP or HTTPS URL.'
+    );
   }
 
   try {
@@ -64,14 +66,19 @@ export async function fetchPage(url: string): Promise<string> {
     const message = error instanceof Error ? error.message : 'Unknown error';
 
     if (message.includes('net::ERR')) {
-      throw new BrowserError('Failed to load page. The site may be unreachable or blocking requests.');
+      throw new BrowserError(
+        'Failed to load page. The site may be unreachable or blocking requests.'
+      );
     }
 
     if (message.includes('timeout')) {
       throw new BrowserError('Failed to fetch page: Request timed out.');
     }
 
-    throw new BrowserError(`Failed to fetch page: ${message}`, error instanceof Error ? error : undefined);
+    throw new BrowserError(
+      `Failed to fetch page: ${message}`,
+      error instanceof Error ? error : undefined
+    );
   }
 }
 
@@ -81,9 +88,13 @@ export async function fetchPage(url: string): Promise<string> {
  * @returns ExtractedContent with title and text
  * @throws BrowserError if extraction fails
  */
-export async function extractPageContent(url: string): Promise<ExtractedContent> {
+export async function extractPageContent(
+  url: string
+): Promise<ExtractedContent> {
   if (!isValidUrl(url)) {
-    throw new BrowserError('Invalid URL provided. Please provide a valid HTTP or HTTPS URL.');
+    throw new BrowserError(
+      'Invalid URL provided. Please provide a valid HTTP or HTTPS URL.'
+    );
   }
 
   let browserInstance: Browser | null = null;
@@ -111,26 +122,42 @@ export async function extractPageContent(url: string): Promise<ExtractedContent>
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const extracted = await (page.evaluate as any)(() => {
-      const UNWANTED = ['script', 'style', 'noscript', 'template', 'nav', 'header', 'footer', 'aside', 'iframe', 'noembed', 'noframes'];
+      const UNWANTED = [
+        'script',
+        'style',
+        'noscript',
+        'template',
+        'nav',
+        'header',
+        'footer',
+        'aside',
+        'iframe',
+        'noembed',
+        'noframes',
+      ];
 
       function isUnwanted(el: any): boolean {
         const tag = el.tagName?.toLowerCase() || '';
-        return UNWANTED.includes(tag) ||
-               el.classList?.contains('sidebar') ||
-               el.classList?.contains('advertisement') ||
-               el.classList?.contains('ad') ||
-               el.classList?.contains('comments') ||
-               el.getAttribute?.('role') === 'navigation' ||
-               el.getAttribute?.('aria-hidden') === 'true' ||
-               el.hasAttribute?.('hidden');
+        return (
+          UNWANTED.includes(tag) ||
+          el.classList?.contains('sidebar') ||
+          el.classList?.contains('advertisement') ||
+          el.classList?.contains('ad') ||
+          el.classList?.contains('comments') ||
+          el.getAttribute?.('role') === 'navigation' ||
+          el.getAttribute?.('aria-hidden') === 'true' ||
+          el.hasAttribute?.('hidden')
+        );
       }
 
       function isHidden(el: any): boolean {
         const style = window.getComputedStyle(el);
-        return style.display === 'none' || 
-               style.visibility === 'hidden' || 
-               style.opacity === '0' ||
-               el.hasAttribute?.('hidden');
+        return (
+          style.display === 'none' ||
+          style.visibility === 'hidden' ||
+          style.opacity === '0' ||
+          el.hasAttribute?.('hidden')
+        );
       }
 
       function getTextContent(node: any, depth: number): string {
@@ -170,7 +197,13 @@ export async function extractPageContent(url: string): Promise<ExtractedContent>
           if (isUnwanted(el) || isHidden(el)) return;
 
           const tag = el.tagName?.toLowerCase() || '';
-          if (tag.match(/^h[1-6]$/) || tag === 'p' || tag === 'li' || tag === 'blockquote' || tag === 'pre') {
+          if (
+            tag.match(/^h[1-6]$/) ||
+            tag === 'p' ||
+            tag === 'li' ||
+            tag === 'blockquote' ||
+            tag === 'pre'
+          ) {
             const text = getTextContent(el, depth).trim();
             if (text) blocks.push(text);
           }
@@ -216,14 +249,19 @@ export async function extractPageContent(url: string): Promise<ExtractedContent>
     const message = error instanceof Error ? error.message : 'Unknown error';
 
     if (message.includes('net::ERR')) {
-      throw new BrowserError('Failed to load page. The site may be unreachable or blocking requests.');
+      throw new BrowserError(
+        'Failed to load page. The site may be unreachable or blocking requests.'
+      );
     }
 
     if (message.includes('timeout')) {
       throw new BrowserError('Failed to fetch page: Request timed out.');
     }
 
-    throw new BrowserError(`Failed to extract page content: ${message}`, error instanceof Error ? error : undefined);
+    throw new BrowserError(
+      `Failed to extract page content: ${message}`,
+      error instanceof Error ? error : undefined
+    );
   }
 }
 
@@ -236,4 +274,3 @@ export async function closeBrowser(): Promise<void> {
     browser = null;
   }
 }
-

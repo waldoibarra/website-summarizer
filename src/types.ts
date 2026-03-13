@@ -33,4 +33,3 @@ export interface SummaryResult {
   /** Number of tokens used */
   tokensUsed: number;
 }
-

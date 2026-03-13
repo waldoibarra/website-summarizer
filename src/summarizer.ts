@@ -7,7 +7,8 @@ const MAX_RETRIES = 3;
 const RETRY_DELAYS = [1000, 2000, 4000]; // Exponential backoff: 1s, 2s, 4s
 
 // Prompts - extracted for maintainability
-const SYSTEM_PROMPT = 'You are a helpful assistant that summarizes web page content. Provide a concise summary of the following text.';
+const SYSTEM_PROMPT =
+  'You are a helpful assistant that summarizes web page content. Provide a concise summary of the following text.';
 const USER_PROMPT_PREFIX = 'Please summarize this web page content:\n\n';
 
 const OPENROUTER_API_BASE = 'https://openrouter.ai/api/v1';
@@ -19,11 +20,16 @@ const OPENROUTER_API_BASE = 'https://openrouter.ai/api/v1';
  * @returns SummaryResult with the summary and metadata
  * @throws SummarizationError if summarization fails
  */
-export async function summarize(text: string, options?: SummarizerOptions): Promise<SummaryResult> {
+export async function summarize(
+  text: string,
+  options?: SummarizerOptions
+): Promise<SummaryResult> {
   const apiKey = process.env.OPENROUTER_API_KEY;
 
   if (!apiKey) {
-    throw new SummarizationError('Error: OPENROUTER_API_KEY environment variable is required');
+    throw new SummarizationError(
+      'Error: OPENROUTER_API_KEY environment variable is required'
+    );
   }
 
   const model = options?.model ?? DEFAULT_MODEL;
@@ -43,7 +49,7 @@ export async function summarize(text: string, options?: SummarizerOptions): Prom
       const response = await fetch(`${OPENROUTER_API_BASE}/chat/completions`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${apiKey}`,
+          Authorization: `Bearer ${apiKey}`,
           'Content-Type': 'application/json',
           'HTTP-Referer': 'https://github.com',
           'X-Title': 'Website Summarizer',
@@ -70,16 +76,20 @@ export async function summarize(text: string, options?: SummarizerOptions): Prom
         if (response.status === 429) {
           if (attempt < MAX_RETRIES - 1) {
             // Wait before retrying
-            await new Promise(resolve => setTimeout(resolve, RETRY_DELAYS[attempt]));
+            await new Promise((resolve) =>
+              setTimeout(resolve, RETRY_DELAYS[attempt])
+            );
             continue;
           }
           throw new SummarizationError(`Rate limited. Please try again later.`);
         }
 
-        throw new SummarizationError(`API error: ${response.status} - ${errorText}`);
+        throw new SummarizationError(
+          `API error: ${response.status} - ${errorText}`
+        );
       }
 
-      const data = await response.json() as {
+      const data = (await response.json()) as {
         choices?: Array<{ message?: { content?: string } }>;
         usage?: { total_tokens?: number };
       };
@@ -105,10 +115,15 @@ export async function summarize(text: string, options?: SummarizerOptions): Prom
       lastError = error instanceof Error ? error : new Error(String(error));
 
       // Check if it's a rate limit
-      if (lastError.message.includes('429') || lastError.message.includes('rate limit')) {
+      if (
+        lastError.message.includes('429') ||
+        lastError.message.includes('rate limit')
+      ) {
         if (attempt < MAX_RETRIES - 1) {
           // Wait before retrying
-          await new Promise(resolve => setTimeout(resolve, RETRY_DELAYS[attempt]));
+          await new Promise((resolve) =>
+            setTimeout(resolve, RETRY_DELAYS[attempt])
+          );
           continue;
         }
       }
@@ -123,4 +138,3 @@ export async function summarize(text: string, options?: SummarizerOptions): Prom
     lastError
   );
 }
-

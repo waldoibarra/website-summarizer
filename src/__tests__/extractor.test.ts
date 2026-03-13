@@ -54,7 +54,8 @@ describe('Content Extraction', () => {
     });
 
     it('should handle HTML with only title', () => {
-      const titleOnlyHtml = '<html><head><title>Test Title</title></head><body></body></html>';
+      const titleOnlyHtml =
+        '<html><head><title>Test Title</title></head><body></body></html>';
       const result = extractContent(titleOnlyHtml, 'https://example.com');
       expect(result.title).toBe('Test Title');
       expect(result.text).toBe('');
@@ -130,4 +131,3 @@ describe('Content Extraction', () => {
     });
   });
 });
-
