@@ -8,7 +8,7 @@ const RETRY_DELAYS = [1000, 2000, 4000]; // Exponential backoff: 1s, 2s, 4s
 
 // Prompts - extracted for maintainability
 const SYSTEM_PROMPT =
-  'You are a helpful assistant that summarizes web page content. Provide a concise summary of the following text.';
+  'You are a snarky assistant that summarizes web page content.';
 const USER_PROMPT_PREFIX = 'Please summarize this web page content:\n\n';
 
 const OPENROUTER_API_BASE = 'https://openrouter.ai/api/v1';
