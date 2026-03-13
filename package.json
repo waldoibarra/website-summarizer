@@ -1,0 +1,41 @@
+{
+  "name": "website-summarizer",
+  "version": "1.0.0",
+  "description": "CLI tool to summarize websites using AI via OpenRouter",
+  "main": "dist/index.js",
+  "type": "module",
+  "bin": {
+    "website-summarizer": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "mutation": "stryker run"
+  },
+  "keywords": [
+    "cli",
+    "summarizer",
+    "ai",
+    "openrouter",
+    "playwright"
+  ],
+  "author": "",
+  "license": "ISC",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@stryker-mutator/core": "^9.6.0",
+    "@stryker-mutator/vitest-runner": "^9.6.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.0"
+  },
+  "dependencies": {
+    "@openrouter/sdk": "^0.9.11",
+    "cheerio": "^1.2.0",
+    "commander": "^14.0.3",
+    "playwright": "^1.58.2"
+  }
+}
