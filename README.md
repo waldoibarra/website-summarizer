@@ -45,13 +45,18 @@ website-summarizer <url> --max-length 5000
 
 ## Environment Variables
 
-Set your OpenRouter API key:
+Copy the example environment file and add your OpenRouter API key:
 
 ```bash
-export OPENROUTER_API_KEY=your_api_key_here
+# Copy the example file
+cp .env.example .env
+
+# Edit .env and add your API key
 ```
 
 You can get a free API key from [OpenRouter](https://openrouter.ai/).
+
+The `.env` file is ignored by git — never commit secrets.
 
 ## Examples
 
