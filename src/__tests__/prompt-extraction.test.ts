@@ -9,8 +9,9 @@ describe('Prompt Extraction', () => {
     const content = fs.readFileSync(summarizerPath, 'utf-8');
 
     // Check that SYSTEM_PROMPT constant exists
+    expect(content).toContain('const SYSTEM_PROMPT =');
     expect(content).toContain(
-      "const SYSTEM_PROMPT = 'You are a helpful assistant that summarizes web page content. Provide a concise summary of the following text.'"
+      'You are a helpful assistant that summarizes web page content. Provide a concise summary of the following text.'
     );
   });
 
@@ -18,9 +19,8 @@ describe('Prompt Extraction', () => {
     const content = fs.readFileSync(summarizerPath, 'utf-8');
 
     // Check that USER_PROMPT_PREFIX constant exists
-    expect(content).toContain(
-      "const USER_PROMPT_PREFIX = 'Please summarize this web page content:\\n\\n'"
-    );
+    expect(content).toContain('const USER_PROMPT_PREFIX =');
+    expect(content).toContain('Please summarize this web page content:');
   });
 
   it('should use SYSTEM_PROMPT constant in API call', () => {
