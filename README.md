@@ -38,10 +38,10 @@ website-summarizer <url> --max-length 5000
 
 ### Options
 
-| Option | Alias | Description | Default |
-|--------|-------|-------------|---------|
-| `--model` | `-m` | AI model to use | `google/gemini-2.0-flash-001` |
-| `--max-length` | `-l` | Maximum characters to send to AI | `8000` |
+| Option         | Alias | Description                      | Default                       |
+| -------------- | ----- | -------------------------------- | ----------------------------- |
+| `--model`      | `-m`  | AI model to use                  | `google/gemini-2.0-flash-001` |
+| `--max-length` | `-l`  | Maximum characters to send to AI | `8000`                        |
 
 ## Environment Variables
 
@@ -109,6 +109,7 @@ The tool consists of four main modules:
 ### Error Handling
 
 Custom error types provide specific error messages:
+
 - `ValidationError` - Invalid URLs or input
 - `BrowserError` - Page fetching failures
 - `ExtractionError` - Content extraction issues
@@ -117,4 +118,3 @@ Custom error types provide specific error messages:
 ## License
 
 ISC
-
