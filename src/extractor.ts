@@ -27,28 +27,51 @@ export function extractContent(html: string, url: string): ExtractedContent {
     // Remove unwanted elements
     $('script, style, nav, header, footer, aside, .sidebar, .advertisement, .ad, .comments, .social-share, .related-articles').remove();
 
-    // Extract main content
+    // Extract main content - iterate through child elements to preserve structure
     let text = '';
-    
-    // Try to find main content in semantic elements
-    const $article = $('article').first();
-    if ($article.length) {
-      text = $article.text();
-    } else {
-      const $main = $('main').first();
-      if ($main.length) {
-        text = $main.text();
-      } else {
-        // Fallback to body
-        text = $('body').text();
+
+    const contentSelectors = [
+      'article',
+      'main',
+      'div.content',
+      'div.main',
+      'div.article',
+      '[role="main"]',
+    ];
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let $content: cheerio.Cheerio<any> | null = null;
+
+    for (const selector of contentSelectors) {
+      const $el = $(selector).first();
+      if ($el.length) {
+        $content = $el;
+        break;
       }
     }
 
-    // Clean up the text
-    text = text
-      .replace(/\s+/g, ' ')
-      .replace(/\n+/g, ' ')
-      .trim();
+    if ($content && $content.length) {
+      const paragraphs: string[] = [];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      $content.find('p, h1, h2, h3, h4, h5, h6, li, blockquote, pre').each((_i: number, el: any) => {
+        const elText = $(el).text().trim();
+        if (elText) {
+          paragraphs.push(elText);
+        }
+      });
+
+      // If no specific elements found, get all text
+      if (paragraphs.length === 0) {
+        text = $content.text();
+      } else {
+        text = paragraphs.join('\n\n');
+      }
+    }
+
+    // Final fallback: try to get any text from body (not html, to avoid getting title)
+    if (!text || !text.trim()) {
+      text = $('body').text();
+    }
 
     // Truncate if too long
     if (text.length > MAX_CONTENT_LENGTH) {
