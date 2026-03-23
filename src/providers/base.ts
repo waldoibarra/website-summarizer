@@ -116,7 +116,7 @@ export abstract class BaseLLMProvider implements LLMProvider {
         }
 
         const response = await fetch(
-          `${this.getBaseUrl()}/v1/chat/completions`,
+          `${this.getBaseUrl()}/chat/completions`,
           {
             method: 'POST',
             headers,

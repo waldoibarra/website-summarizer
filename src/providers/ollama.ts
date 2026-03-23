@@ -2,7 +2,7 @@ import { ProviderType } from '../types.js';
 import { BaseLLMProvider } from './base.js';
 
 const DEFAULT_MODEL = 'qwen3';
-const DEFAULT_OLLAMA_URL = 'http://localhost:11434';
+const DEFAULT_OLLAMA_URL = 'http://localhost:11434/v1';
 
 /**
  * Ollama provider implementation using OpenAI-compatible /v1/chat/completions API

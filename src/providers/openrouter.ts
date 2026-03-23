@@ -3,7 +3,7 @@ import { BaseLLMProvider } from './base.js';
 
 const DEFAULT_MODEL = 'openrouter/free';
 
-const OPENROUTER_API_BASE = 'https://openrouter.ai/api';
+const OPENROUTER_API_BASE = 'https://openrouter.ai/api/v1';
 
 /**
  * OpenRouter provider implementation
