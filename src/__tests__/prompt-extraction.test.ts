@@ -3,20 +3,21 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 describe('Prompt Extraction', () => {
-  const summarizerPath = path.join(process.cwd(), 'src/summarizer.ts');
+  // Constants moved to OpenRouterProvider after refactoring
+  const providerPath = path.join(process.cwd(), 'src/providers/openrouter.ts');
 
   it('should extract system prompt to a constant', () => {
-    const content = fs.readFileSync(summarizerPath, 'utf-8');
+    const content = fs.readFileSync(providerPath, 'utf-8');
 
     // Check that SYSTEM_PROMPT constant exists
     expect(content).toContain('const SYSTEM_PROMPT =');
     expect(content).toContain(
-      'You are a helpful assistant that summarizes web page content. Provide a concise summary of the following text.'
+      'You are a snarky assistant that summarizes web page content.'
     );
   });
 
   it('should extract user prompt prefix to a constant', () => {
-    const content = fs.readFileSync(summarizerPath, 'utf-8');
+    const content = fs.readFileSync(providerPath, 'utf-8');
 
     // Check that USER_PROMPT_PREFIX constant exists
     expect(content).toContain('const USER_PROMPT_PREFIX =');
@@ -24,7 +25,7 @@ describe('Prompt Extraction', () => {
   });
 
   it('should use SYSTEM_PROMPT constant in API call', () => {
-    const content = fs.readFileSync(summarizerPath, 'utf-8');
+    const content = fs.readFileSync(providerPath, 'utf-8');
 
     // Check that SYSTEM_PROMPT is used (not hardcoded)
     expect(content).toContain("role: 'system'");
@@ -32,7 +33,7 @@ describe('Prompt Extraction', () => {
   });
 
   it('should use USER_PROMPT_PREFIX constant in API call', () => {
-    const content = fs.readFileSync(summarizerPath, 'utf-8');
+    const content = fs.readFileSync(providerPath, 'utf-8');
 
     // Check that USER_PROMPT_PREFIX is used (not hardcoded)
     expect(content).toContain('USER_PROMPT_PREFIX');
@@ -40,7 +41,7 @@ describe('Prompt Extraction', () => {
   });
 
   it('should not have hardcoded system prompt in messages', () => {
-    const content = fs.readFileSync(summarizerPath, 'utf-8');
+    const content = fs.readFileSync(providerPath, 'utf-8');
 
     // After extraction, the hardcoded prompt should be replaced with the constant
     // This regex checks that the hardcoded string is NOT in the messages section
@@ -56,7 +57,7 @@ describe('Prompt Extraction', () => {
   });
 
   it('should not have hardcoded user prompt prefix in messages', () => {
-    const content = fs.readFileSync(summarizerPath, 'utf-8');
+    const content = fs.readFileSync(providerPath, 'utf-8');
 
     // After extraction, the hardcoded prefix should be replaced with the constant
     // Check that the content template uses the constant

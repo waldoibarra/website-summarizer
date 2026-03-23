@@ -4,7 +4,8 @@ import 'dotenv/config';
 import { Command } from 'commander';
 import { extractPageContent } from './browser.js';
 import { processExtractedContent } from './extractor.js';
-import { summarize } from './summarizer.js';
+import { ProviderType } from './summarizer.js';
+import { createLLMProvider } from './providers/index.js';
 import { validateUrl } from './validation.js';
 import {
   ValidationError,
@@ -17,21 +18,42 @@ export const program = new Command();
 
 program
   .name('website-summarizer')
-  .description('CLI tool to summarize websites using AI via OpenRouter')
+  .description('CLI tool to summarize websites using AI (OpenRouter or Ollama)')
   .version('1.0.0')
   .argument('[url]', 'The website URL to summarize')
   .option('-m, --model <model>', 'AI model to use', 'openrouter/free')
   .option('-l, --max-length <n>', 'Maximum characters to send to AI', '8000')
+  .option(
+    '-p, --provider <type>',
+    'AI provider (openrouter or ollama)',
+    'openrouter'
+  )
   .action(
     async (
       url: string | undefined,
-      options: { model?: string; maxLength?: string }
+      options: { model?: string; maxLength?: string; provider?: string }
     ) => {
       // If no URL provided, show help and exit with code 0
       if (!url) {
         program.help();
         process.exit(0);
       }
+
+      // Validate provider type
+      const providerArg = options.provider?.toLowerCase();
+      let providerType: ProviderType;
+
+      if (providerArg === 'ollama') {
+        providerType = ProviderType.OLLAMA;
+      } else if (providerArg === 'openrouter' || !providerArg) {
+        providerType = ProviderType.OPENROUTER;
+      } else {
+        console.error(
+          `Error: Invalid provider '${options.provider}'. Valid options are: openrouter, ollama`
+        );
+        process.exit(1);
+      }
+
       try {
         // Validate URL
         const validatedUrl = validateUrl(url);
@@ -54,8 +76,9 @@ program
 
         console.log('Generating summary...');
 
-        // Generate summary
-        const result = await summarize(extracted.text, {
+        // Generate summary using factory
+        const provider = createLLMProvider(providerType);
+        const result = await provider.summarize(extracted.text, {
           url: validatedUrl,
           model: options.model,
           maxLength: parseInt(options.maxLength || '8000', 10),

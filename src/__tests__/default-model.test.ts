@@ -12,11 +12,14 @@ describe('Default Model Configuration', () => {
     expect(content).toContain('model <model>');
   });
 
-  it('should default to openrouter/free in summarizer (summarizer.ts)', async () => {
-    const summarizerPath = path.join(process.cwd(), 'src/summarizer.ts');
-    const content = fs.readFileSync(summarizerPath, 'utf-8');
+  it('should default to openrouter/free in OpenRouterProvider', async () => {
+    const providerPath = path.join(
+      process.cwd(),
+      'src/providers/openrouter.ts'
+    );
+    const content = fs.readFileSync(providerPath, 'utf-8');
 
-    // Check that DEFAULT_MODEL is set to 'openrouter/free'
+    // Check that DEFAULT_MODEL is set to 'openrouter/free' in the provider
     expect(content).toContain("DEFAULT_MODEL = 'openrouter/free'");
   });
 });

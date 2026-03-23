@@ -2,6 +2,11 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { Command } from 'commander';
 
 describe('CLI Entry Point', () => {
+  beforeEach(() => {
+    // Prevent process.exit from causing unhandled errors in tests
+    vi.spyOn(process, 'exit').mockImplementation(() => undefined as never);
+  });
+
   describe('CLI argument parsing', () => {
     it('should be able to import the CLI module', async () => {
       const { program } = await import('../index.js');
